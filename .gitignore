@@ -128,4 +128,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+OUTFILE.txt
+logs
+client_secrets.json
 OUTFILE
