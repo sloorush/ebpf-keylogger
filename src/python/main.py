@@ -22,6 +22,7 @@ th = threading.Thread(target=threadFunc)
 def main(args):
     print(args)
     if args.upload:
+        print("Uploading to gdrive as well!")
         th.start()
         bpf = BPFProgram(args)
         bpf.main()
